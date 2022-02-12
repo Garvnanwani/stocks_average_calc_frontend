@@ -6,6 +6,7 @@ const App = () => {
   const [file, setFile] = useState(null)
   const [fileName, setFileName] = useState('')
   const [average, setAverage] = useState(null)
+  const server_url = import.meta.env.VITE_SERVER_URL
 
   const onChange = (event) => {
     console.log('something')
@@ -20,7 +21,7 @@ const App = () => {
       const data = new FormData()
       data.append('file', file)
       data.append('userId', userId)
-      fetch('http://localhost:5000/api/upload', {
+      fetch(`${server_url}/api/upload`, {
         method: 'POST',
         body: data,
       })
@@ -37,7 +38,7 @@ const App = () => {
 
   const getAverage = () => {
     const userId = localStorage.getItem('userId')
-    fetch(`http://localhost:5000/api/average/${userId}`)
+    fetch(`${server_url}/api/average/${userId}`)
       .then((res) => res.json())
       .then((data) => {
         setAverage(data.average)
@@ -46,7 +47,7 @@ const App = () => {
 
   const resetData = () => {
     const userId = localStorage.getItem('userId')
-    fetch(`http://localhost:5000/api/delete-data/${userId}`)
+    fetch(`${server_url}/api/delete-data/${userId}`)
     setAverage(null)
     setFileName('')
     setFile(null)
