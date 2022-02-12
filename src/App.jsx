@@ -12,7 +12,6 @@ const App = () => {
   const server_url = import.meta.env.VITE_SERVER_URL
 
   const onChange = (event) => {
-    console.log('something')
     setFile(event.target.files[0])
     setFileName(event.target.files[0].name)
   }
@@ -62,8 +61,8 @@ const App = () => {
 
   return (
     <div className="App">
-      <h2>Stock Average Calculator</h2>
       <div className="App-header">
+        <h2>Stock Average Calculator</h2>
         <div>
           <p>{message}</p>
           {average && <h2>{Number(average).toFixed(3)}</h2>}
