@@ -5,6 +5,9 @@ import { v4 as uuid } from 'uuid'
 const App = () => {
   const [file, setFile] = useState(null)
   const [fileName, setFileName] = useState('')
+  const [message, setMessage] = useState(
+    'Upload a csv file to calculate average',
+  )
   const [average, setAverage] = useState(null)
   const server_url = import.meta.env.VITE_SERVER_URL
 
@@ -28,7 +31,7 @@ const App = () => {
         .then((res) => res.json())
         .then((data) => {
           if (data.success === true) {
-            alert('File uploaded successfully')
+            setMessage(`${fileName} uploaded successfully`)
           }
         })
     } else {
@@ -37,15 +40,18 @@ const App = () => {
   }
 
   const getAverage = () => {
+    setMessage('Calculating average...')
     const userId = localStorage.getItem('userId')
     fetch(`${server_url}/api/average/${userId}`)
       .then((res) => res.json())
       .then((data) => {
         setAverage(data.average)
+        setMessage('The average is ')
       })
   }
 
   const resetData = () => {
+    setMessage('Upload a csv file to calculate average')
     const userId = localStorage.getItem('userId')
     fetch(`${server_url}/api/delete-data/${userId}`)
     setAverage(null)
@@ -58,6 +64,10 @@ const App = () => {
     <div className="App">
       <h2>Stock Average Calculator</h2>
       <div className="App-header">
+        <div>
+          <p>{message}</p>
+          {average && <h2>{Number(average).toFixed(3)}</h2>}
+        </div>
         <div className="inputData">
           <div className="fileInput">
             <input
@@ -79,7 +89,6 @@ const App = () => {
           <button onClick={getAverage}>Calculate Average</button>
           <button onClick={resetData}>Reset Data</button>
         </div>
-        {average && <h2>Stock Price Average : {Number(average).toFixed(3)}</h2>}
       </div>
     </div>
   )
